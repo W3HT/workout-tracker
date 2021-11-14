@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 
 const opts = {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false}  
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/userdb", opts) 
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", opts) 
 
 app.use(routes)
 

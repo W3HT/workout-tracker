@@ -2,54 +2,50 @@ const router = require("express").Router();
 const Workouts = require("../../models/Workout");
 const mongojs = require("mongojs");
 
-// gest - last
+
+// gest - last - aggregate $sum
 router.get("/", (req, res) => {
   Workouts.aggregate([
     {
       $addFields: {
-        totalDuration: {
-          $sum: "$exercies.duration",
-        },
+        totalDuration: {$sum: "$exercies.duration"},
       },
     },
   ])
-    .then((data) => res.json(data))
-    .catch((err) => console.log(err));
+  .then((data) => res.json(data))
+  .catch((err) => res.status(400).json(err))
 });
 
 // post - new workout
 router.post("/", (req, res) => {
   Workouts.create(req.body)
-    .then((data) => res.json(data))
-    .catch((err) => console.log(err));
+  .then((data) => res.json(data))
+  .catch((err) => res.status(400).json(err))
 });
-// gets - combined weight / total duration - limit 7 - aggregate
-router.get("/", (req, res) => {
+// gets - combined weight / total duration - limit 7 - aggregate $sum
+router.get("/range", (req, res) => {
   Workouts.aggregate([
     {
       $addFields: {
         totalDuration: {
-          $sum: "$exercies.duration",
+          $sum: "$exercies.duration"
         },
       },
     },
   ])
     .limit(7)
     .then((data) => res.json(data))
-    .catch((err) => console.log(err));
-});
+    .catch((err) => res.status(400).json(err));
+})
 
 // put - new exercise - /:id
 router.put("/:id", (req, res) => {
-    console.log(req.params.id)
-    Workouts.updateOne({
-    _id: mongojs.ObjectId(req.params.id),
-  });
-  if (err) {
-    res.send(err);
-  } else {
-    res.send(data);
-  }
-});
+    Workouts.findOneAndUpdate(
+        {_id: req.params.id}, 
+        { $set: {exercies: req.body}}, 
+        {new: true})
+    .then((data) => res.json(data))
+    .catch((err) => res.status(400).json(err))
+})
 
 module.exports = router;

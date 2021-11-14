@@ -7,12 +7,12 @@ router.get("/", (req, res) => {
   });
   
   // exercise page route
-  router.get("/exercise, (req, res) => {
+  router.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname + "../../public/exercise.html"));
   });
   
   // exercise page route
-  router.get("/stats, (req, res) => {
+  router.get("/stats", (req, res) => {
     res.sendFile(path.join(__dirname + "../../public/stats.html"));
   });
   
