@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
   Workouts.aggregate([
     {
       $addFields: {
-        totalDuration: {$sum: "$exercies.duration"},
+        totalDuration: {$sum: "$exercises.duration"},
       },
     },
   ])
@@ -28,23 +28,30 @@ router.get("/range", (req, res) => {
     {
       $addFields: {
         totalDuration: {
-          $sum: "$exercies.duration"
+          $sum: "$exercises.duration"
         },
       },
     },
   ])
     .limit(7)
-    .then((data) => res.json(data))
+    .then((data) => {
+      console.log(data)
+    res.json(data)
+  })
     .catch((err) => res.status(400).json(err));
 })
 
 // put - new exercise - /:id
 router.put("/:id", (req, res) => {
+  console.log(req.body)
     Workouts.findOneAndUpdate(
         {_id: req.params.id}, 
-        { $set: {exercies: req.body}}, 
+        { $push: {exercises: req.body}}, 
         {new: true})
-    .then((data) => res.json(data))
+    .then((data) => {
+      console.log(data)
+      res.json(data)
+    })
     .catch((err) => res.status(400).json(err))
 })
 

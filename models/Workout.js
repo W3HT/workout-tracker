@@ -23,7 +23,7 @@ const WorkoutSchema = new Schema({
                 type: Number,
                 
             },
-            weigth: {
+            weight: {
                 type: Number,
                 
             },
